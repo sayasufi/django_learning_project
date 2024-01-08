@@ -13,6 +13,14 @@ python3 manage.py runserver --insecure
 ```Shell
 python manage.py shell_plus --print-sql
 ```
+#### 4) Создание новой миграции
+```Shell
+python3 manage.py makemigrations
+```
+#### 5) Применить миграцию
+```Shell
+ python3 manage.py migrate
+```
 
 ## 2. База данных
 #### 1) Добавление записи в БД
