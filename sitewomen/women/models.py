@@ -20,6 +20,13 @@ class Women(models.Model):
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     cat = models.ForeignKey("Category", on_delete=models.PROTECT)
     tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")
+    husband = models.OneToOneField(
+        "Husband",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="wuman",
+    )
 
     objects = models.Manager()
     published = PublishedManager()
@@ -47,6 +54,7 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse("category", kwargs={"cat_slug": self.slug})
 
+
 class TagPost(models.Model):
     tag = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
@@ -56,3 +64,11 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse("tag", kwargs={"tag_slug": self.slug})
+
+
+class Husband(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.name
