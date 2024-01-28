@@ -4,7 +4,9 @@ from django.urls import reverse
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(is_published=Women.Status.PUBLISHED)
+        return (
+            super().get_queryset().filter(is_published=Women.Status.PUBLISHED)
+        )
 
 
 class Women(models.Model):
@@ -17,8 +19,12 @@ class Women(models.Model):
     content = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
-    cat = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="posts")
+    is_published = models.BooleanField(
+        choices=Status.choices, default=Status.DRAFT
+    )
+    cat = models.ForeignKey(
+        "Category", on_delete=models.PROTECT, related_name="posts"
+    )
     tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")
     husband = models.OneToOneField(
         "Husband",
