@@ -11,7 +11,6 @@ menu = [
 ]
 
 
-
 def index(request):
     data = {
         "title": "Главная страница",
@@ -43,7 +42,11 @@ def show_post(request, post_slug):
 
 
 def addpage(request):
-    return HttpResponse("Добавление статьи")
+    return render(
+        request,
+        "women/addpage.html",
+        {"menu": menu, "title": "Добавление статьи"},
+    )
 
 
 def contact(request):
@@ -56,7 +59,7 @@ def login(request):
 
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
-    posts = Women.published.filter(cat_id=category.pk).select_related('cat')
+    posts = Women.published.filter(cat_id=category.pk).select_related("cat")
     data = {
         "title": f"Рубрика: {category.name}",
         "menu": menu,
@@ -72,7 +75,9 @@ def page_not_found(request, exception):
 
 def show_tag_postlist(request, tag_slug):
     tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.tags.filter(is_published=Women.Status.PUBLISHED).select_related('cat')
+    posts = tag.tags.filter(
+        is_published=Women.Status.PUBLISHED
+    ).select_related("cat")
 
     data = {
         "title": f"Тег: {tag.tag}",
