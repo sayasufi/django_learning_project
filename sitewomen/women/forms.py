@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 
 from .models import Category, Husband, Women
-from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 
 # https://docs.djangoproject.com/en/4.2/ref/forms/api/#django.forms.Form
@@ -68,3 +67,7 @@ class AddPostForm(forms.ModelForm):
             "title": forms.TextInput(attrs={"class": "form-input"}),
             "content": forms.Textarea(attrs={"cols": 60, "rows": 10}),
         }
+
+
+class UploadFileForm(forms.Form):
+    file = forms.ImageField(label="Изображение")
