@@ -1,10 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView, DetailView
 
 from women.forms import AddPostForm, UploadFileForm
-from women.models import Women, Category, TagPost, UploadFiles
+from women.models import Women, TagPost, UploadFiles
 
 menu = [
     {"title": "О сайте", "url_name": "about"},
@@ -67,6 +67,19 @@ def show_post(request, post_slug):
     return render(request, "women/post.html", context=data)
 
 
+class ShowPost(DetailView):
+    template_name = "women/post.html"
+    slug_url_kwarg = "post_slug"
+    context_object_name = "post"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = context["post"]
+        context["menu"] = menu
+        return context
+    def get_object(self, queryset=None):
+        return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
+
 class AddPage(View):
     def get(self, request):
         form = AddPostForm()
@@ -119,20 +132,21 @@ class WomenCategory(ListView):
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
 
-class WomenTag(ListView):
+
+class TagPostList(ListView):
     template_name = "women/index.html"
     context_object_name = "posts"
     allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = f"Посты с тегом - {self.tag.tag}"
+        tag = TagPost.objects.get(slug=self.kwargs["tag_slug"])
+        context["title"] = "Тег: " + tag.tag
         context["menu"] = menu
-        context["cat_selected"] = 0
+        context["cat_selected"] = None
         return context
 
     def get_queryset(self):
-        self.tag = get_object_or_404(TagPost, slug=self.kwargs["tag_slug"])
-        return self.tag.tags.filter(is_published=Women.Status.PUBLISHED).select_related(
-            "cat"
-        )
+        return Women.published.filter(
+            tags__slug=self.kwargs["tag_slug"]
+        ).select_related("cat")
