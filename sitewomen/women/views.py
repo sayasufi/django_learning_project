@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
 
 from women.forms import AddPostForm, UploadFileForm
 from women.models import Women, TagPost, UploadFiles
@@ -70,20 +70,24 @@ class ShowPost(DetailView):
         return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(FormView):
+class AddPage(CreateView):
     form_class = AddPostForm
     template_name = "women/addpage.html"
-    success_url = reverse_lazy("home")
-
+    # success_url = reverse_lazy("home")
     extra_context = {
         "menu": menu,
         "title": "Добавление статьи",
     }
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
+class UpdatePage(UpdateView):
+    model = Women
+    fields = ['title', 'content', 'photo', 'is_published', 'cat']
+    template_name = 'women/addpage.html'
+    success_url = reverse_lazy('home')
+    extra_context = {
+        'menu': menu,
+        'title': 'Редактирование статьи',
+    }
 
 def contact(request):
     return HttpResponse("Обратная связь")
