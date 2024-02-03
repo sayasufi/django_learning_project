@@ -124,9 +124,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "time_update",
-                    models.DateTimeField(
-                        auto_now=True, verbose_name="Время изменения"
-                    ),
+                    models.DateTimeField(auto_now=True, verbose_name="Время изменения"),
                 ),
                 (
                     "is_published",
