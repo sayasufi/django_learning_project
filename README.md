@@ -3,31 +3,37 @@
 
 ## 1. Консольные
 
-#### 1) Запуск сервера
+#### 1) Создание нового приложения
+
+```Shell
+python manage.py startapp users
+```
+
+#### 2) Запуск сервера
 
 ```Shell
 python3 manage.py runserver
 ```
 
-#### 2) Запуск сервера в режиме DEBUG = True с загрузкой static файлов
+#### 3) Запуск сервера в режиме DEBUG = True с загрузкой static файлов
 
 ```Shell
 python3 manage.py runserver --insecure
 ```
 
-#### 3) Запуск оболочки для добавления записей в БД
+#### 4) Запуск оболочки для добавления записей в БД
 
 ```Shell
 python manage.py shell_plus --print-sql
 ```
 
-#### 4) Создание новой миграции
+#### 5) Создание новой миграции
 
 ```Shell
 python3 manage.py makemigrations
 ```
 
-#### 5) Применить миграцию
+#### 6) Применить миграцию
 
 ```Shell
  python3 manage.py migrate
