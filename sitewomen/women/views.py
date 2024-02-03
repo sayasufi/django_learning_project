@@ -1,7 +1,8 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 
 from women.forms import AddPostForm, UploadFileForm
 from women.models import Women, TagPost, UploadFiles
@@ -54,19 +55,6 @@ def about(request):
     )
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(Women, slug=post_slug)
-
-    data = {
-        "title": post.title,
-        "menu": menu,
-        "post": post,
-        "cat_selected": 1,
-    }
-
-    return render(request, "women/post.html", context=data)
-
-
 class ShowPost(DetailView):
     template_name = "women/post.html"
     slug_url_kwarg = "post_slug"
@@ -77,29 +65,24 @@ class ShowPost(DetailView):
         context["title"] = context["post"]
         context["menu"] = menu
         return context
+
     def get_object(self, queryset=None):
         return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
 
-class AddPage(View):
-    def get(self, request):
-        form = AddPostForm()
-        return render(
-            request,
-            "women/addpage.html",
-            {"menu": menu, "title": "Добавление статьи", "form": form},
-        )
 
-    def post(self, request):
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
+class AddPage(FormView):
+    form_class = AddPostForm
+    template_name = "women/addpage.html"
+    success_url = reverse_lazy("home")
 
-        return render(
-            request,
-            "women/addpage.html",
-            {"menu": menu, "title": "Добавление статьи", "form": form},
-        )
+    extra_context = {
+        "menu": menu,
+        "title": "Добавление статьи",
+    }
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 
 def contact(request):
