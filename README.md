@@ -1,3 +1,4 @@
+<a href="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400"><img src="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400.svg" alt="wakatime"></a>
 # Команды:
 
 ## 1. Консольные
@@ -191,4 +192,25 @@ Husband.objects.aggregate(res=Sum("age") - Avg("age"))
 ```python
 Women.objects.values("title", "cat_id").get(pk=1)
 Women.objects.values("title", "cat__name").get(pk=1)
+```
+
+## 7. Пагинация
+https://docs.djangoproject.com/en/4.2/ref/paginator/
+https://docs.djangoproject.com/en/4.2/topics/pagination/
+
+```python
+from django.core.paginator import Paginator
+p = Paginator(women, 3)
+
+p.count # число элементов в списке
+p.num_pages # число страниц (10:3 = 4 – округление до большего)
+p.page_range # итератор для перебора номеров страниц
+
+p1 = p.page(1) # получение первой страницы
+p1.object_list  # список элементов текущей страницы
+p1.has_next() # имеется ли следующая страница
+p1.has_previous() # имеется ли предыдущая страница
+p1.has_other_pages() # имеются ли вообще страницы
+p1.next_page_number() # номер следующей страницы
+p1.previous_page_number() # номер предыдущей страницы
 ```

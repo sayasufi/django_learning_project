@@ -1,10 +1,11 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from women.forms import AddPostForm, UploadFileForm
-from women.models import Women, TagPost, UploadFiles
+from women.forms import AddPostForm
+from women.models import Women, TagPost
 from women.utils import DataMixin
 
 
@@ -14,25 +15,20 @@ class WomenHome(DataMixin, ListView):
     context_object_name = "posts"
     title_page = "Главная страница"
     cat_selected = 0
+
     def get_queryset(self):
         return Women.published.all().select_related("cat")
 
 
-
 def about(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            #            handle_uploaded_file(form.cleaned_data['file'])
-            fp = UploadFiles(file=form.cleaned_data["file"])
-            fp.save()
-    else:
-        form = UploadFileForm()
+    contact_list = Women.published.all()
+    paginator = Paginator(contact_list, 3)
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     return render(
-        request,
-        "women/about.html",
-        {"title": "О сайте", "form": form},
+        request, "women/about.html", {"page_obj": page_obj, "title": "О сайте"}
     )
 
 
@@ -57,10 +53,10 @@ class AddPage(DataMixin, CreateView):
 
 class UpdatePage(DataMixin, UpdateView):
     model = Women
-    fields = ['title', 'content', 'photo', 'is_published', 'cat']
-    template_name = 'women/addpage.html'
-    success_url = reverse_lazy('home')
-    title_page = 'Редактирование статьи'
+    fields = ["title", "content", "photo", "is_published", "cat"]
+    template_name = "women/addpage.html"
+    success_url = reverse_lazy("home")
+    title_page = "Редактирование статьи"
 
 
 def contact(request):
@@ -78,11 +74,12 @@ class WomenCategory(DataMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cat = context['posts'][0].cat
-        return self.get_mixin_context(context,
-                                      title='Категория - ' + cat.name,
-                                      cat_selected=cat.id,
-                                      )
+        cat = context["posts"][0].cat
+        return self.get_mixin_context(
+            context,
+            title="Категория - " + cat.name,
+            cat_selected=cat.id,
+        )
 
     def get_queryset(self):
         return Women.published.filter(cat__slug=self.kwargs["cat_slug"]).select_related(
@@ -101,8 +98,8 @@ class TagPostList(DataMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
-        return self.get_mixin_context(context, title='Тег: ' + tag.tag)
+        tag = TagPost.objects.get(slug=self.kwargs["tag_slug"])
+        return self.get_mixin_context(context, title="Тег: " + tag.tag)
 
     def get_queryset(self):
         return Women.published.filter(
