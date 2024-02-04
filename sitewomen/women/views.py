@@ -21,6 +21,7 @@ class WomenHome(DataMixin, ListView):
     def get_queryset(self):
         return Women.published.all().select_related("cat")
 
+
 @login_required
 def about(request):
     contact_list = Women.published.all()

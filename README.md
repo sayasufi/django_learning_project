@@ -1,4 +1,5 @@
 <a href="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400"><img src="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400.svg" alt="wakatime"></a>
+
 # Команды:
 
 ## 1. Консольные
@@ -201,6 +202,7 @@ Women.objects.values("title", "cat__name").get(pk=1)
 ```
 
 ## 7. Пагинация
+
 https://docs.djangoproject.com/en/4.2/ref/paginator/
 https://docs.djangoproject.com/en/4.2/topics/pagination/
 
