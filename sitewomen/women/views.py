@@ -45,7 +45,9 @@ class ShowPost(DataMixin, DetailView):
         return self.get_mixin_context(context, title=context["post"].title)
 
     def get_object(self, queryset=None):
-        return get_object_or_404(Women.published, slug=self.kwargs[self.slug_url_kwarg])
+        return get_object_or_404(
+            Women.published, slug=self.kwargs[self.slug_url_kwarg]
+        )
 
 
 class AddPage(LoginRequiredMixin, DataMixin, CreateView):
@@ -91,9 +93,9 @@ class WomenCategory(DataMixin, ListView):
         )
 
     def get_queryset(self):
-        return Women.published.filter(cat__slug=self.kwargs["cat_slug"]).select_related(
-            "cat"
-        )
+        return Women.published.filter(
+            cat__slug=self.kwargs["cat_slug"]
+        ).select_related("cat")
 
 
 def page_not_found(request, exception):

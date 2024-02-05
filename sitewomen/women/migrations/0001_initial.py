@@ -100,7 +100,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("title", models.CharField(max_length=255, verbose_name="Заголовок")),
+                (
+                    "title",
+                    models.CharField(max_length=255, verbose_name="Заголовок"),
+                ),
                 (
                     "slug",
                     models.SlugField(
@@ -112,7 +115,10 @@ class Migration(migrations.Migration):
                         ],
                     ),
                 ),
-                ("content", models.TextField(blank=True, verbose_name="Текст статьи")),
+                (
+                    "content",
+                    models.TextField(blank=True, verbose_name="Текст статьи"),
+                ),
                 (
                     "time_create",
                     models.DateTimeField(
@@ -121,7 +127,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "time_update",
-                    models.DateTimeField(auto_now=True, verbose_name="Время изменения"),
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="Время изменения"
+                    ),
                 ),
                 (
                     "is_published",
@@ -187,7 +195,8 @@ class Migration(migrations.Migration):
                 "ordering": ["-time_create"],
                 "indexes": [
                     models.Index(
-                        fields=["-time_create"], name="women_women_time_cr_9f33c2_idx"
+                        fields=["-time_create"],
+                        name="women_women_time_cr_9f33c2_idx",
                     )
                 ],
             },

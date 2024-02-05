@@ -45,7 +45,9 @@ def translit_to_eng(s: str) -> str:
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(is_published=Women.Status.PUBLISHED)
+        return (
+            super().get_queryset().filter(is_published=Women.Status.PUBLISHED)
+        )
 
 
 class Women(models.Model):
@@ -64,8 +66,12 @@ class Women(models.Model):
         ],
     )
     content = models.TextField(blank=True, verbose_name="Текст статьи")
-    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
-    time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
+    time_create = models.DateTimeField(
+        auto_now_add=True, verbose_name="Время создания"
+    )
+    time_update = models.DateTimeField(
+        auto_now=True, verbose_name="Время изменения"
+    )
     is_published = models.BooleanField(
         choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
         default=Status.DRAFT,
@@ -127,7 +133,9 @@ class Women(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, db_index=True, verbose_name="Категория")
+    name = models.CharField(
+        max_length=100, db_index=True, verbose_name="Категория"
+    )
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
     class Meta:
