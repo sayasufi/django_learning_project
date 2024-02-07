@@ -1,8 +1,26 @@
 <a href="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400"><img src="https://wakatime.com/badge/user/018c3f04-b140-41f9-a489-5b0143d153f5/project/018cd368-b900-42f1-b5b5-ecc343495400.svg" alt="wakatime"></a>
 
-# Команды:
+# Информационный блог на Django
 
-## 1. Консольные
+## Используемые фреймворки и библиотеки
+<ul>
+<li><strong>Django 5</strong></li>
+<li><strong>Sqlite 3</strong></li>
+<li><strong>Django Debug Toolbar</strong></li>
+<li><strong>Django Extensions</strong></li>
+</ul>
+
+## Функционал сайта
+
+#### 1) Система регистрации и авторизации пользователя с возможностью восстановления пароля
+#### 2) База данных sqlite3
+#### 3) Добавление статей на сайт
+#### 4) Добавление тегов и категорий к статьям, сортировка по ним
+#### 5) Админ панель
+
+## Команды:
+
+### 1. Консольные
 
 #### 1) Создание нового приложения
 
@@ -40,7 +58,7 @@ python3 manage.py makemigrations
  python3 manage.py migrate
 ```
 
-## 2. База данных
+### 2. База данных
 
 #### 1) Добавление записи в БД
 
@@ -95,7 +113,7 @@ Women.objects.filter(pk__lte=4).update(is_published=1)
 Women.objects.filter(pk__gte=5).delete()
 ```
 
-## 3. ORM-команды с классом Q
+### 3. ORM-команды с классом Q
 
 ```python
 from django.db.models import Q
@@ -111,7 +129,7 @@ Women.objects.filter(Q(pk__in=[1, 2, 5]) | Q(cat_id=2), title__icontains="ра")
 Women.objects.filter(Q(pk__in=[1, 2, 5]) | Q(cat_id=2) & Q(title__icontains="ра"))
 ```
 
-## 4. Методы выбора записей
+### 4. Методы выбора записей
 
 #### 1) Первая и последняя записи
 
@@ -145,7 +163,7 @@ c2.posts.count()
 Women.objects.filter(cat=c2).count()
 ```
 
-## 5. Класс F, Value и метод annotate()
+### 5. Класс F, Value и метод annotate()
 
 #### 1) Счетчик числа
 
@@ -165,7 +183,7 @@ lst = Husband.objects.all().annotate(is_married=F("m_count"))
 lst = Husband.objects.all().annotate(work_age=F("age") - 20, salary=F("age") * 1.10)
 ```
 
-## 6. Агрегирующие функции Count, Sum, Avg, Max, Min. Метод values()
+### 6. Агрегирующие функции Count, Sum, Avg, Max, Min. Метод values()
 
 https://docs.djangoproject.com/en/4.2/ref/models/querysets/#aggregation-functions
 
@@ -201,7 +219,7 @@ Women.objects.values("title", "cat_id").get(pk=1)
 Women.objects.values("title", "cat__name").get(pk=1)
 ```
 
-## 7. Пагинация
+### 7. Пагинация
 
 https://docs.djangoproject.com/en/4.2/ref/paginator/
 https://docs.djangoproject.com/en/4.2/topics/pagination/
